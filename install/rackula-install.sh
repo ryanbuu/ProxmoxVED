@@ -95,6 +95,7 @@ else
 fi
 mkdir -p /etc/systemd/system/nginx.service.d
 cp /opt/rackula/config/nginx.service.d-override.conf /etc/systemd/system/nginx.service.d/override.conf
+systemctl daemon-reload
 systemctl enable -q nginx rackula-api
 systemctl restart nginx rackula-api
 msg_ok "Created Services"

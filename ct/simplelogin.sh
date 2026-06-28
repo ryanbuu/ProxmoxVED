@@ -37,10 +37,10 @@ function update_script() {
     msg_ok "Stopped Services"
 
     create_backup /opt/simplelogin/.env \
-        /opt/simplelogin/dkim \
-        /opt/simplelogin/openid-rsa.key \
-        /opt/simplelogin/openid-rsa.pub \
-        /opt/simplelogin/uploads
+                  /opt/simplelogin/dkim \
+                  /opt/simplelogin/openid-rsa.key \
+                  /opt/simplelogin/openid-rsa.pub \
+                  /opt/simplelogin/uploads
 
     CLEAN_INSTALL=1 fetch_and_deploy_gh_release "simplelogin" "simple-login/app"
 

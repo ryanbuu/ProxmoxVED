@@ -63,6 +63,7 @@ function update_script() {
 
     msg_info "Starting Services"
     $STD nginx -t
+    systemctl daemon-reload
     systemctl start nginx rackula-api
     msg_ok "Started Services"
 
