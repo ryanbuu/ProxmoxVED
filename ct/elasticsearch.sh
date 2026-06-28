@@ -15,6 +15,11 @@ var_os="${var_os:-debian}"
 var_version="${var_version:-12}"
 var_arm64="${var_arm64:-yes}"
 var_unprivileged="${var_unprivileged:-1}"
+# Allow the container to mount NFS filesystems (e.g. for the data directory)
+var_mount_fs="${var_mount_fs:-nfs}"
+
+# Data directory; point this at an attached NFS mountpoint to store indices on NFS
+export ES_DATA_PATH="${ES_DATA_PATH:-/var/lib/elasticsearch}"
 
 header_info "$APP"
 variables
@@ -39,6 +44,12 @@ function update_script() {
   $STD apt update
   $STD apt install --only-upgrade -y elasticsearch
   msg_ok "Updated Elasticsearch"
+
+  if [[ -d "${ES_DATA_PATH}" ]]; then
+    msg_info "Verifying Data Directory Ownership"
+    chown -R elasticsearch:elasticsearch "${ES_DATA_PATH}"
+    msg_ok "Verified Data Directory Ownership"
+  fi
 
   msg_info "Starting Elasticsearch"
   systemctl start elasticsearch

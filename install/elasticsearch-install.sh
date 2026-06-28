@@ -33,6 +33,7 @@ ES_CONFIG="/etc/elasticsearch/elasticsearch.yml"
 # Drop the security auto-configuration block written by the package on install
 sed -i '/# BEGIN SECURITY AUTO CONFIGURATION/,/# END SECURITY AUTO CONFIGURATION/d' "$ES_CONFIG"
 sed -i '/^xpack\.security\./d;/^cluster\.initial_master_nodes:/d' "$ES_CONFIG"
+ES_DATA_PATH="${ES_DATA_PATH:-/var/lib/elasticsearch}"
 cat <<EOF >>"$ES_CONFIG"
 
 # Managed by community-scripts
@@ -40,8 +41,17 @@ network.host: 0.0.0.0
 http.port: 9200
 discovery.type: single-node
 xpack.security.enabled: false
+path.data: ${ES_DATA_PATH}
 EOF
 msg_ok "Configured Elasticsearch"
+
+# Data directory may live on an attached (e.g. NFS) mountpoint; ensure it exists
+# and is owned by the elasticsearch service user so the node can write to it.
+msg_info "Preparing Data Directory"
+mkdir -p "${ES_DATA_PATH}"
+chown -R elasticsearch:elasticsearch "${ES_DATA_PATH}"
+chmod 2750 "${ES_DATA_PATH}"
+msg_ok "Prepared Data Directory (${ES_DATA_PATH})"
 
 msg_info "Starting Elasticsearch"
 systemctl enable -q --now elasticsearch

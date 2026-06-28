@@ -40,6 +40,10 @@
     {
       "text": "To enable authentication, set xpack.security.enabled: true in /etc/elasticsearch/elasticsearch.yml and create passwords with /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic.",
       "type": "info"
+    },
+    {
+      "text": "To store indices on NFS: mount the share on the Proxmox host and attach it as a mountpoint, e.g. pct set <CTID> -mp0 /mnt/pve/nfs-es,mp=/var/lib/elasticsearch. The data directory is chowned to the elasticsearch user on install/update; for unprivileged containers the NFS export must permit the mapped UID/GID (e.g. via no_root_squash or anonuid/anongid). Set ES_DATA_PATH to use a custom mount location.",
+      "type": "info"
     }
   ]
 }
