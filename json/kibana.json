@@ -14,7 +14,7 @@
   "website": "https://www.elastic.co/kibana",
   "logo": "https://raw.githubusercontent.com/selfhst/icons/main/png/kibana.png",
   "config_path": "/etc/kibana/kibana.yml",
-  "description": "Kibana is the data visualization and management dashboard for Elasticsearch. This container installs Kibana from the official Elastic APT repository and connects it to an Elasticsearch node via enrollment token or explicit credentials.",
+  "description": "Kibana is the data visualization and management dashboard for Elasticsearch. This container installs Kibana from the official Elastic APT repository and connects it to an Elasticsearch node. By default it talks to http://127.0.0.1:9200 without authentication, matching the Elasticsearch container's default.",
   "install_methods": [
     {
       "type": "default",
@@ -34,15 +34,11 @@
   },
   "notes": [
     {
-      "text": "Kibana requires a running Elasticsearch node. The easiest setup is to pass KIBANA_ENROLLMENT_TOKEN, generated on the Elasticsearch node with: bin/elasticsearch-create-enrollment-token -s kibana",
+      "text": "Kibana requires a running Elasticsearch node. Set KIBANA_ES_HOSTS to point at it (e.g. http://es.intra.ryanbuu.dev:9200) when Elasticsearch is not on localhost.",
       "type": "warning"
     },
     {
-      "text": "Without an enrollment token, set KIBANA_ES_HOSTS (e.g. https://es.intra.ryanbuu.dev:9200) plus KIBANA_ES_USERNAME (default kibana_system) and KIBANA_ES_PASSWORD to connect manually.",
-      "type": "info"
-    },
-    {
-      "text": "Log in to the web UI at http://IP:5601 with the Elasticsearch 'elastic' superuser credentials.",
+      "text": "If Elasticsearch security is enabled, either pass KIBANA_ENROLLMENT_TOKEN (generated with bin/elasticsearch-create-enrollment-token -s kibana) or set KIBANA_ES_USERNAME (default kibana_system) and KIBANA_ES_PASSWORD.",
       "type": "info"
     }
   ]

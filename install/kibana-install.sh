@@ -16,7 +16,7 @@ update_os
 
 kibana_es_hosts_yaml() {
   local host
-  local hosts="${KIBANA_ES_HOSTS:-https://127.0.0.1:9200}"
+  local hosts="${KIBANA_ES_HOSTS:-http://127.0.0.1:9200}"
   local first=1
   local IFS=,
   local out="["
@@ -68,13 +68,16 @@ if [[ -n "${KIBANA_ENROLLMENT_TOKEN:-}" ]]; then
   msg_ok "Enrolled Kibana with Elasticsearch"
 else
   msg_info "Connecting Kibana to Elasticsearch"
+  KIBANA_ES_HOSTS_YAML="$(kibana_es_hosts_yaml)"
   {
-    echo "elasticsearch.hosts: $(kibana_es_hosts_yaml)"
-    echo "elasticsearch.username: \"${KIBANA_ES_USERNAME:-kibana_system}\""
+    echo "elasticsearch.hosts: ${KIBANA_ES_HOSTS_YAML}"
     if [[ -n "${KIBANA_ES_PASSWORD:-}" ]]; then
+      echo "elasticsearch.username: \"${KIBANA_ES_USERNAME:-kibana_system}\""
       echo "elasticsearch.password: \"${KIBANA_ES_PASSWORD}\""
     fi
-    echo "elasticsearch.ssl.verificationMode: none"
+    if [[ "$KIBANA_ES_HOSTS_YAML" == *https://* ]]; then
+      echo "elasticsearch.ssl.verificationMode: none"
+    fi
   } >>"$KIBANA_CONFIG"
   msg_ok "Connected Kibana to Elasticsearch"
 fi

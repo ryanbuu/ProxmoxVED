@@ -54,6 +54,4 @@ description
 msg_ok "Completed successfully!\n"
 echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
 echo -e "${INFO}${YW} HTTP endpoint:${CL}"
-echo -e "${TAB}${GATEWAY}${BGN}https://${IP}:9200${CL}"
-echo -e "${INFO}${YW} Credentials (user 'elastic'):${CL}"
-echo -e "${TAB}${BGN}/root/elasticsearch.creds${CL}"
+echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:9200${CL}"
