@@ -31,7 +31,15 @@ class KeaTests(unittest.TestCase):
         self.assertLess(INSTALL.index('systemctl mask'), INSTALL.index('$STD apt install'))
         self.assertIn('chown root:_kea /etc/kea/kea-dhcp4.conf', INSTALL)
         self.assertIn('runuser -u _kea -- kea-dhcp4 -t', INSTALL)
+        self.assertIn('ConditionFileNotEmpty=\n', INSTALL)
         self.assertNotRegex(re.sub(r"cat <<'GUIDE'.*?\nGUIDE", '', INSTALL, flags=re.S), r'systemctl (?:enable|start|unmask) ')
+
+    def test_ha_and_agent_ports_are_distinct(self):
+        dhcp = json.loads((ROOT/'misc/kea/kea-dhcp4-ha.json').read_text())['Dhcp4']
+        ha = dhcp['hooks-libraries'][1]['parameters']['high-availability'][0]
+        agent = json.loads((ROOT/'misc/kea/kea-ctrl-agent-ha.json').read_text())['Control-agent']
+        self.assertTrue(ha['multi-threading']['http-dedicated-listener'])
+        self.assertTrue(all(':'+str(agent['http-port'])+'/' not in p['url'] for p in ha['peers']))
 
     def test_update_entrypoint(self):
         block = re.search(r'cat <<EOF_UPDATE >/usr/bin/update\n(.*?)\nEOF_UPDATE', INSTALL, re.S)[1]

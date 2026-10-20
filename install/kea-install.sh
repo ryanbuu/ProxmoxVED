@@ -31,6 +31,15 @@ msg_info "Installing Kea"
 $STD apt install -y kea-dhcp4-server kea-dhcp-ddns-server kea-ctrl-agent
 msg_ok "Installed Kea"
 
+# Our Control Agent config does not use Debian's separate password-file template.
+# Retain the package unit, but clear its template-specific activation condition.
+mkdir -p /etc/systemd/system/kea-ctrl-agent.service.d
+cat <<'UNIT' >/etc/systemd/system/kea-ctrl-agent.service.d/helper-config.conf
+[Unit]
+ConditionFileNotEmpty=
+UNIT
+systemctl daemon-reload
+
 msg_info "Configuring Kea"
 # Services are masked, so systemd has not created their RuntimeDirectory yet.
 # Kea 2.6.3+ checks this directory even during Control Agent's -t validation.

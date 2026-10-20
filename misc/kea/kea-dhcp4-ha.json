@@ -77,7 +77,7 @@
               "peers": [
                 {
                   "name": "kea1",
-                  "url": "http://192.0.2.10:8000/",
+                  "url": "http://192.0.2.10:8001/",
                   "role": "primary",
                   "auto-failover": true,
                   "basic-auth-user": "kea-ha",
@@ -85,13 +85,19 @@
                 },
                 {
                   "name": "kea2",
-                  "url": "http://192.0.2.11:8000/",
+                  "url": "http://192.0.2.11:8001/",
                   "role": "standby",
                   "auto-failover": true,
                   "basic-auth-user": "kea-ha",
                   "basic-auth-password": "REPLACE_WITH_SHARED_RANDOM_PASSWORD"
                 }
-              ]
+              ],
+              "multi-threading": {
+                "enable-multi-threading": true,
+                "http-dedicated-listener": true,
+                "http-listener-threads": 1,
+                "http-client-threads": 1
+              }
             }
           ]
         }

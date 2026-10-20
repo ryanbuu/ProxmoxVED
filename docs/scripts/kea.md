@@ -98,7 +98,8 @@ Replace `@HOOK_DIR@` in the DHCP example with that directory. Load `lease_cmds`
 before `ha`. Generate one shared HA password, replace every
 `REPLACE_WITH_SHARED_RANDOM_PASSWORD` in both DHCP configs and both Control Agent
 configs. Basic authentication requires a trusted, isolated management path; it
-does not encrypt HTTP. Restrict TCP 8000 to the partner CT (and explicitly
+does not encrypt HTTP. The example uses TCP 8001 for the HA hook's dedicated listener and TCP 8000
+for Control Agent. Restrict both ports to the partner CT (and explicitly
 approved management sources), or configure TLS using the Kea documentation.
 Do not expose Control Agent to client VLANs or the Internet.
 
@@ -107,6 +108,10 @@ client after communication is lost. It avoids declaring partner-down merely
 because a heartbeat connection failed, but a small/quiet LAN may not switch
 quickly. Choose thresholds for your network and test with actual clients. Setting
 it to zero changes split-brain behavior; do not tune blindly for fast failover.
+
+Ensure the static CT address exists before starting Kea or its HTTP listeners.
+A `network-online.target` dependency alone is insufficient unless the relevant
+network manager's wait-online service is enabled; validate an actual CT reboot.
 
 Configure the gateway to relay each client network to **both CT addresses**.
 Allow peer heartbeat/lease traffic and DHCP relay traffic. Validate both configs,
