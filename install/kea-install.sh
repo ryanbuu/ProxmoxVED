@@ -108,11 +108,12 @@ cat <<'CONF' >/etc/kea/kea-ctrl-agent.conf
   }
 }
 CONF
-# Retain the package's ownership so its service account can read the files.
+# Debian ships root-owned conffiles; grant the service account read access.
+chown root:_kea /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp-ddns.conf /etc/kea/kea-ctrl-agent.conf
 chmod 640 /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp-ddns.conf /etc/kea/kea-ctrl-agent.conf
-$STD kea-dhcp4 -t /etc/kea/kea-dhcp4.conf
-$STD kea-dhcp-ddns -t /etc/kea/kea-dhcp-ddns.conf
-$STD kea-ctrl-agent -t /etc/kea/kea-ctrl-agent.conf
+$STD runuser -u _kea -- kea-dhcp4 -t /etc/kea/kea-dhcp4.conf
+$STD runuser -u _kea -- kea-dhcp-ddns -t /etc/kea/kea-dhcp-ddns.conf
+$STD runuser -u _kea -- kea-ctrl-agent -t /etc/kea/kea-ctrl-agent.conf
 msg_ok "Configured Kea (Services Remain Masked)"
 
 cat <<'GUIDE' >/etc/kea/README.helper-scripts

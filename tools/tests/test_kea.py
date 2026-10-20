@@ -29,6 +29,8 @@ class KeaTests(unittest.TestCase):
         self.assertEqual(agent['http-host'], '127.0.0.1')
         self.assertEqual(agent['control-sockets']['dhcp4'], dhcp['control-socket'])
         self.assertLess(INSTALL.index('systemctl mask'), INSTALL.index('$STD apt install'))
+        self.assertIn('chown root:_kea /etc/kea/kea-dhcp4.conf', INSTALL)
+        self.assertIn('runuser -u _kea -- kea-dhcp4 -t', INSTALL)
         self.assertNotRegex(re.sub(r"cat <<'GUIDE'.*?\nGUIDE", '', INSTALL, flags=re.S), r'systemctl (?:enable|start|unmask) ')
 
     def test_update_entrypoint(self):
