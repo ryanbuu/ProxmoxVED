@@ -1,0 +1,49 @@
+{
+  "name": "BIND9",
+  "slug": "bind9",
+  "categories": [
+    4
+  ],
+  "date_created": "2026-10-20",
+  "type": "ct",
+  "updateable": true,
+  "privileged": false,
+  "has_arm": true,
+  "interface_port": null,
+  "documentation": "https://bind9.readthedocs.io/",
+  "website": "https://www.isc.org/bind/",
+  "config_path": "/etc/bind/named.conf",
+  "description": "ISC BIND 9 authoritative DNS and recursive resolver from Debian 13 packages. Initially listens on loopback only. Supports DNSSEC, TSIG, primary/secondary replication and dnstap; configure these before exposing DNS to clients.",
+  "install_methods": [
+    {
+      "type": "default",
+      "script": "ct/bind9.sh",
+      "resources": {
+        "cpu": 1,
+        "ram": 1024,
+        "hdd": 8,
+        "os": "debian",
+        "version": "13"
+      }
+    }
+  ],
+  "default_credentials": {
+    "username": null,
+    "password": null
+  },
+  "notes": [
+    {
+      "type": "warning",
+      "text": "The initial resolver listens on loopback only. Configure listen-on, allow-query, allow-recursion and zone transfer ACLs before using it on the network."
+    },
+    {
+      "type": "info",
+      "text": "No web UI is bundled. Stork, primary/secondary replication, TSIG updates and dnstap collection are optional separate configuration steps. See docs/scripts/bind9.md."
+    },
+    {
+      "type": "info",
+      "text": "Uses Debian security-maintained packages. The update function validates configuration and stores a protected configuration and zone backup under /opt before upgrading."
+    }
+  ],
+  "logo": "https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/bind-9.webp"
+}
