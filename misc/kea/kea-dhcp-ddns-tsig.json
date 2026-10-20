@@ -1,0 +1,41 @@
+{
+  "DhcpDdns": {
+    "ip-address": "127.0.0.1",
+    "port": 53001,
+    "tsig-keys": [
+      {
+        "name": "kea-ddns",
+        "algorithm": "HMAC-SHA256",
+        "secret": "REPLACE_WITH_BASE64_TSIG_SECRET"
+      }
+    ],
+    "forward-ddns": {
+      "ddns-domains": [
+        {
+          "name": "lan.example.",
+          "key-name": "kea-ddns",
+          "dns-servers": [
+            {
+              "ip-address": "192.0.2.53",
+              "port": 53
+            }
+          ]
+        }
+      ]
+    },
+    "reverse-ddns": {
+      "ddns-domains": [
+        {
+          "name": "100.51.198.in-addr.arpa.",
+          "key-name": "kea-ddns",
+          "dns-servers": [
+            {
+              "ip-address": "192.0.2.53",
+              "port": 53
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "Dhcp4": {
+    "interfaces-config": {
+      "interfaces": [
+        "eth0"
+      ],
+      "dhcp-socket-type": "udp"
+    },
+    "control-socket": {
+      "socket-type": "unix",
+      "socket-name": "/run/kea/kea4-ctrl-socket"
+    },
+    "lease-database": {
+      "type": "memfile",
+      "persist": true,
+      "name": "/var/lib/kea/kea-leases4.csv",
+      "lfc-interval": 3600
+    },
+    "valid-lifetime": 86400,
+    "renew-timer": 21600,
+    "rebind-timer": 43200,
+    "dhcp-ddns": {
+      "enable-updates": true,
+      "server-ip": "127.0.0.1",
+      "server-port": 53001
+    },
+    "ddns-send-updates": true,
+    "ddns-override-client-update": true,
+    "ddns-override-no-update": true,
+    "ddns-update-on-renew": true,
+    "ddns-qualifying-suffix": "lan.example",
+    "subnet4": [
+      {
+        "id": 1,
+        "subnet": "198.51.100.0/24",
+        "pools": [
+          {
+            "pool": "198.51.100.100 - 198.51.100.199"
+          }
+        ],
+        "relay": {
+          "ip-addresses": [
+            "198.51.100.1"
+          ]
+        },
+        "option-data": [
+          {
+            "name": "routers",
+            "data": "198.51.100.1"
+          },
+          {
+            "name": "domain-name-servers",
+            "data": "192.0.2.53, 192.0.2.54"
+          },
+          {
+            "name": "domain-name",
+            "data": "lan.example"
+          }
+        ]
+      }
+    ],
+    "hooks-libraries": [
+      {
+        "library": "@HOOK_DIR@/libdhcp_lease_cmds.so"
+      },
+      {
+        "library": "@HOOK_DIR@/libdhcp_ha.so",
+        "parameters": {
+          "high-availability": [
+            {
+              "this-server-name": "kea1",
+              "mode": "hot-standby",
+              "heartbeat-delay": 10000,
+              "max-response-delay": 60000,
+              "max-ack-delay": 5000,
+              "max-unacked-clients": 1,
+              "peers": [
+                {
+                  "name": "kea1",
+                  "url": "http://192.0.2.10:8000/",
+                  "role": "primary",
+                  "auto-failover": true,
+                  "basic-auth-user": "kea-ha",
+                  "basic-auth-password": "REPLACE_WITH_SHARED_RANDOM_PASSWORD"
+                },
+                {
+                  "name": "kea2",
+                  "url": "http://192.0.2.11:8000/",
+                  "role": "standby",
+                  "auto-failover": true,
+                  "basic-auth-user": "kea-ha",
+                  "basic-auth-password": "REPLACE_WITH_SHARED_RANDOM_PASSWORD"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "loggers": [
+      {
+        "name": "kea-dhcp4",
+        "output_options": [
+          {
+            "output": "stdout"
+          }
+        ],
+        "severity": "INFO"
+      }
+    ]
+  }
+}
