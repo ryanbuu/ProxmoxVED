@@ -1,0 +1,22 @@
+{
+  "Control-agent": {
+    "http-host": "192.0.2.10",
+    "http-port": 8000,
+    "authentication": {
+      "type": "basic",
+      "realm": "kea-ha",
+      "clients": [
+        {
+          "user": "kea-ha",
+          "password": "REPLACE_WITH_SHARED_RANDOM_PASSWORD"
+        }
+      ]
+    },
+    "control-sockets": {
+      "dhcp4": {
+        "socket-type": "unix",
+        "socket-name": "/run/kea/kea4-ctrl-socket"
+      }
+    }
+  }
+}

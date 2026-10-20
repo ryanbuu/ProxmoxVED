@@ -1,0 +1,49 @@
+{
+  "name": "Kea",
+  "slug": "kea",
+  "categories": [
+    4
+  ],
+  "date_created": "2026-10-20",
+  "type": "ct",
+  "updateable": true,
+  "privileged": false,
+  "has_arm": true,
+  "interface_port": null,
+  "documentation": "https://kea.readthedocs.io/",
+  "website": "https://www.isc.org/kea/",
+  "logo": "https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/isc-kea.webp",
+  "config_path": "/etc/kea/kea-dhcp4.conf",
+  "description": "ISC Kea DHCPv4 server with DHCP-DDNS (D2), a loopback-only Control Agent and packaged HA hooks. Installed from Debian 13 packages with services masked until subnets, HA and migration are configured. Stork is not included.",
+  "install_methods": [
+    {
+      "type": "default",
+      "script": "ct/kea.sh",
+      "resources": {
+        "cpu": 1,
+        "ram": 512,
+        "hdd": 4,
+        "os": "debian",
+        "version": "13"
+      }
+    }
+  ],
+  "default_credentials": {
+    "username": null,
+    "password": null
+  },
+  "notes": [
+    {
+      "type": "warning",
+      "text": "DHCP, D2 and Control Agent are masked after installation. Configure static addressing and subnets, migrate leases, then explicitly enable the required services."
+    },
+    {
+      "type": "info",
+      "text": "Defaults to UDP sockets for DHCP relay. For directly attached clients, configure raw sockets. HA and TSIG/DDNS require manual configuration; see docs/scripts/kea.md."
+    },
+    {
+      "type": "info",
+      "text": "Uses the Debian 13 Kea package version, not necessarily the latest upstream release. No web UI is bundled."
+    }
+  ]
+}
